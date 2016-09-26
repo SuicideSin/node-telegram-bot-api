@@ -546,7 +546,6 @@ describe('Telegram', function telegramSuite() {
 }); // End Telegram
 
 describe('#TelegramBotPolling', function TelegramBotPollingSuite() {
-
   it('should call the callback on polling', function test(done) {
     const opts = { interval: 100, timeout: 1 };
     const polling = new TelegramPolling(TOKEN, opts, (msg) => {
@@ -583,5 +582,4 @@ describe('#TelegramBotPolling', function TelegramBotPollingSuite() {
       };
     });
   });
-
 });
