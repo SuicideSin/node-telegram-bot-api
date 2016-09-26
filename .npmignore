@@ -7,7 +7,6 @@ coverage/
 README.hbs
 output.md
 output/
-src/
 test/
 examples/
 lib-doc/
@@ -17,6 +16,5 @@ lib-doc/
 .eslintrc
 .eslintignore
 .editorconfig
-.babelrc
 .gitignore
 .git
