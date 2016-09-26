@@ -14,9 +14,11 @@
     "bot"
   ],
   "scripts": {
-    "prepublish": "babel -d ./lib src",
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec --timeout 10000",
+    "prepublish": "npm run build",
+    "preinstall": "npm run build",
     "prepublish:test": "npm run prepublish && npm run test",
+    "build": "babel -d ./lib src",
     "gen-doc": "jsdoc2md --src src/telegram.js -t README.hbs > README.md",
     "eslint": "eslint ./src"
   },
