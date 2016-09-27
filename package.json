@@ -15,10 +15,7 @@
   ],
   "scripts": {
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec --timeout 10000",
-    "prepublish": "npm run build",
-    "preinstall": "npm run build",
-    "prepublish:test": "npm run prepublish && npm run test",
-    "build": "babel -d ./lib src",
+    "prepublish:test": "npm run test",
     "gen-doc": "jsdoc2md --src src/telegram.js -t README.hbs > README.md",
     "eslint": "eslint ./src"
   },
@@ -39,16 +36,7 @@
     "request-promise": "^2.0.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.6.5",
     "babel-eslint": "^6.0.4",
-    "babel-plugin-transform-class-properties": "^6.6.0",
-    "babel-plugin-transform-es2015-destructuring": "^6.6.5",
-    "babel-plugin-transform-es2015-parameters": "^6.7.0",
-    "babel-plugin-transform-es2015-shorthand-properties": "^6.5.0",
-    "babel-plugin-transform-es2015-spread": "^6.6.5",
-    "babel-plugin-transform-object-rest-spread": "^6.6.5",
-    "babel-plugin-transform-strict-mode": "^6.6.5",
-    "babel-register": "^6.7.2",
     "contributor": "^0.1.25",
     "eslint": "^2.11.1",
     "eslint-config-airbnb": "^6.1.0",
