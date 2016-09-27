@@ -20,7 +20,7 @@
     "eslint": "eslint ./src"
   },
   "engines": {
-    "node": ">= 6.0"
+    "node": ">= 6.6.0"
   },
   "author": "Yago Pérez <yagoperezs@gmail.com>",
   "license": "MIT",
