@@ -5,7 +5,6 @@ const fs = require('fs');
 const bl = require('bl');
 
 class TelegramBotWebHook {
-
   constructor(token, options, callback) {
     this.token = token;
     this.callback = callback;
@@ -79,7 +78,6 @@ class TelegramBotWebHook {
       res.end();
     }
   }
-
 }
 
 module.exports = TelegramBotWebHook;

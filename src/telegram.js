@@ -21,7 +21,6 @@ const _messageTypes = [
 ];
 
 class TelegramBot extends EventEmitter {
-
   static get messageTypes() {
     return _messageTypes;
   }

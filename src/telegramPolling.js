@@ -5,7 +5,6 @@ const URL = require('url');
 const ANOTHER_WEB_HOOK_USED = 409;
 
 class TelegramBotPolling {
-
   constructor(token, options = {}, callback) {
     // enable cancellation
     Promise.config({
@@ -127,7 +126,6 @@ class TelegramBotPolling {
         throw new Error(`${data.error_code} ${data.description}`);
       });
   }
-
 }
 
 module.exports = TelegramBotPolling;
