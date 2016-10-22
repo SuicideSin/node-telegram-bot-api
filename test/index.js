@@ -16,6 +16,7 @@ if (!TOKEN) {
 
 // Telegram service if not User Id
 const USERID = process.env.TEST_USER_ID || 777000;
+const GROUPID = process.env.TEST_GROUP_ID || -1001075450562;
 
 describe('Telegram', function telegramSuite() {
   describe('#setWebHook', function setWebHookSuite() {
@@ -133,6 +134,43 @@ describe('Telegram', function telegramSuite() {
     });
   });
 
+  describe('#getChat', function getChatSuite() {
+    it('should return a Chat object', function test() {
+      const bot = new Telegram(TOKEN);
+      return bot.getChat(USERID).then(resp => {
+        assert.ok(is.object(resp));
+      });
+    });
+  });
+
+  describe('#getChatAdministrators', function getChatAdministratorsSuite() {
+    it('should return an Array', function test() {
+      const bot = new Telegram(TOKEN);
+      return bot.getChatAdministrators(GROUPID).then(resp => {
+        assert.ok(Array.isArray(resp));
+      });
+    });
+  });
+
+  describe('#getChatMembersCount', function getChatMembersCountSuite() {
+    it('should return an Integer', function test() {
+      const bot = new Telegram(TOKEN);
+      return bot.getChatMembersCount(GROUPID).then(resp => {
+        assert.ok(Number.isInteger(resp));
+      });
+    });
+  });
+
+  describe('#getChatMember', function getChatMemberSuite() {
+    it('should return a ChatMember', function test() {
+      const bot = new Telegram(TOKEN);
+      return bot.getChatMember(GROUPID, USERID).then(resp => {
+        assert.ok(is.object(resp.user));
+        assert.ok(is.string(resp.status));
+      });
+    });
+  });
+
   describe('#getUpdates', function getUpdatesSuite() {
     it('should return an Array', function test() {
       const bot = new Telegram(TOKEN);
@@ -160,6 +198,23 @@ describe('Telegram', function telegramSuite() {
           .then(forwarded => {
             assert.ok(is.object(forwarded));
           });
+      });
+    });
+  });
+
+  describe('#_formatSendData', function _formatSendData() {
+    it('should handle buffer path from fs.readStream', function test() {
+      const bot = new Telegram(TOKEN);
+      let photo;
+      try {
+        photo = fs.createReadStream(Buffer.from(`${__dirname}/bot.gif`));
+      } catch(ex) {
+        // Older Node.js versions do not support passing a Buffer
+        // representation of the path to fs.createReadStream()
+        if (ex instanceof TypeError) return;
+      }
+      return bot.sendPhoto(USERID, photo).then(resp => {
+        assert.ok(is.object(resp));
       });
     });
   });
@@ -204,6 +259,18 @@ describe('Telegram', function telegramSuite() {
       const bot = new Telegram(TOKEN);
       const photo = fs.readFileSync(`${__dirname}/bot.gif`);
       return bot.sendPhoto(USERID, photo).then(resp => {
+        assert.ok(is.object(resp));
+      });
+    });
+
+    it('should send a photo along with reply_markup', function test() {
+      const bot = new Telegram(TOKEN);
+      const photo = fs.readFileSync(`${__dirname}/bot.gif`);
+      return bot.sendPhoto(USERID, photo, {
+        reply_markup: {
+          hide_keyboard: true
+        }
+      }).then(resp => {
         assert.ok(is.object(resp));
       });
     });
@@ -449,6 +516,25 @@ describe('Telegram', function telegramSuite() {
         assert.ok(is.object(resp.location));
         assert.ok(is.number(resp.location.latitude));
         assert.ok(is.number(resp.location.longitude));
+      });
+    });
+  });
+
+  describe('#sendVenue', function sendVenueSuite() {
+    it('should send a venue', function test() {
+      const bot = new Telegram(TOKEN);
+      const lat = 47.5351072;
+      const long = -52.7508537;
+      const title = `The Village Shopping Centre`;
+      const address = `430 Topsail Rd,St. John's, NL A1E 4N1, Canada`;
+      return bot.sendVenue(USERID, lat, long, title, address).then(resp => {
+        assert.ok(is.object(resp));
+        assert.ok(is.object(resp.venue));
+        assert.ok(is.object(resp.venue.location));
+        assert.ok(is.number(resp.venue.location.latitude));
+        assert.ok(is.number(resp.venue.location.longitude));
+        assert.ok(is.string(resp.venue.title));
+        assert.ok(is.string(resp.venue.address));
       });
     });
   });

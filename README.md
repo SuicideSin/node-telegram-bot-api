@@ -33,7 +33,9 @@ There are some other examples on [examples](https://github.com/yagop/node-telegr
 
 ### Events
 Every time TelegramBot receives a message, it emits a `message`. Depending on which  [message](https://core.telegram.org/bots/api#message) was received, emits an event from this ones: `text`, `audio`, `document`, `photo`, `sticker`, `video`, `voice`, `contact`, `location`, `new_chat_participant`, `left_chat_participant`, `new_chat_title`, `new_chat_photo`, `delete_chat_photo`, `group_chat_created`. Its much better to listen a specific event rather than a `message` in order to stay safe from the content.
+TelegramBot emits `callback_query` when receives a [Callback Query](https://core.telegram.org/bots/api#callbackquery).
 TelegramBot emits `inline_query` when receives an [Inline Query](https://core.telegram.org/bots/api#inlinequery) and `chosen_inline_result` when receives a [ChosenInlineResult](https://core.telegram.org/bots/api#choseninlineresult). Bot must be enabled on [inline mode](https://core.telegram.org/bots/api#inline-mode)
+TelegramBot emits `edited_message` when a message is edited, and also `edited_message_text` or `edited_message_caption` depending on which type of message was edited.
 * * *
 
 ### WebHooks
@@ -80,11 +82,19 @@ TelegramBot
     * [.editMessageReplyMarkup(replyMarkup, [options])](#TelegramBot+editMessageReplyMarkup) ⇒ <code>Promise</code>
     * [.getUserProfilePhotos(userId, [offset], [limit])](#TelegramBot+getUserProfilePhotos) ⇒ <code>Promise</code>
     * [.sendLocation(chatId, latitude, longitude, [options])](#TelegramBot+sendLocation) ⇒ <code>Promise</code>
+    * [.sendVenue(chatId, latitude, longitude, title, address, [options])](#TelegramBot+sendVenue) ⇒ <code>Promise</code>
     * [.getFile(fileId)](#TelegramBot+getFile) ⇒ <code>Promise</code>
     * [.getFileLink(fileId)](#TelegramBot+getFileLink) ⇒ <code>Promise</code>
     * [.downloadFile(fileId, downloadDir)](#TelegramBot+downloadFile) ⇒ <code>Promise</code>
     * [.onText(regexp, callback)](#TelegramBot+onText)
     * [.onReplyToMessage(chatId, messageId, callback)](#TelegramBot+onReplyToMessage)
+    * [.getChat(chatId)](#TelegramBot+getChat) ⇒ <code>Promise</code>
+    * [.getChatAdministrators(chatId)](#TelegramBot+getChatAdministrators) ⇒ <code>Promise</code>
+    * [.getChatMembersCount(chatId)](#TelegramBot+getChatMembersCount) ⇒ <code>Promise</code>
+    * [.getChatMember(chatId, userId)](#TelegramBot+getChatMember) ⇒ <code>Promise</code>
+    * [.leaveChat(chatId)](#TelegramBot+leaveChat) ⇒ <code>Promise</code>
+    * [.sendGame(chatId, gameShortName, [options])](#TelegramBot+sendGame) ⇒ <code>Promise</code>
+    * [.setGameScore(userId, score, [options])](#TelegramBot+setGameScore) ⇒ <code>Promise</code>
 
 <a name="new_TelegramBot_new"></a>
 
@@ -426,6 +436,24 @@ Use this method to send point on the map.
 | longitude | <code>Float</code> | Longitude of location |
 | [options] | <code>Object</code> | Additional Telegram query options |
 
+<a name="TelegramBot+sendVenue"></a>
+
+### telegramBot.sendVenue(chatId, latitude, longitude, title, address, [options]) ⇒ <code>Promise</code>
+Send venue.
+Use this method to send information about a venue.
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#sendvenue  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the message recipient |
+| latitude | <code>Float</code> | Latitude of location |
+| longitude | <code>Float</code> | Longitude of location |
+| title | <code>String</code> | Name of the venue |
+| address | <code>String</code> | Address of the venue |
+| [options] | <code>Object</code> | Additional Telegram query options |
+
 <a name="TelegramBot+getFile"></a>
 
 ### telegramBot.getFile(fileId) ⇒ <code>Promise</code>
@@ -496,5 +524,96 @@ Register a reply to wait for a message response.
 | chatId | <code>Number</code> &#124; <code>String</code> | The chat id where the message cames from. |
 | messageId | <code>Number</code> &#124; <code>String</code> | The message id to be replied. |
 | callback | <code>function</code> | Callback will be called with the reply message. |
+
+<a name="TelegramBot+getChat"></a>
+
+### telegramBot.getChat(chatId) ⇒ <code>Promise</code>
+Use this method to get up to date information about the chat
+(current name of the user for one-on-one conversations, current
+username of a user, group or channel, etc.).
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#getchat  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) |
+
+<a name="TelegramBot+getChatAdministrators"></a>
+
+### telegramBot.getChatAdministrators(chatId) ⇒ <code>Promise</code>
+Returns the administrators in a chat in form of an Array of `ChatMember` objects.
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#getchatadministrators  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the target group or username of the target supergroup |
+
+<a name="TelegramBot+getChatMembersCount"></a>
+
+### telegramBot.getChatMembersCount(chatId) ⇒ <code>Promise</code>
+Use this method to get the number of members in a chat.
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#getchatmemberscount  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the target group or username of the target supergroup |
+
+<a name="TelegramBot+getChatMember"></a>
+
+### telegramBot.getChatMember(chatId, userId) ⇒ <code>Promise</code>
+Use this method to get information about a member of a chat.
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#getchatmember  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the target group or username of the target supergroup |
+| userId | <code>String</code> | Unique identifier of the target user |
+
+<a name="TelegramBot+leaveChat"></a>
+
+### telegramBot.leaveChat(chatId) ⇒ <code>Promise</code>
+Leave a group, supergroup or channel.
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#leavechat  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the target group or username of the target supergroup (in the format @supergroupusername) |
+
+<a name="TelegramBot+sendGame"></a>
+
+### telegramBot.sendGame(chatId, gameShortName, [options]) ⇒ <code>Promise</code>
+Use this method to send a game.
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#sendgame  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the message recipient |
+| gameShortName | <code>String</code> | name of the game to be sent. |
+| [options] | <code>Object</code> | Additional Telegram query options |
+
+<a name="TelegramBot+setGameScore"></a>
+
+### telegramBot.setGameScore(userId, score, [options]) ⇒ <code>Promise</code>
+Use this method to set the score of the specified user in a game.
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#setgamescore  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userId | <code>String</code> | Unique identifier of the target user |
+| score | <code>Number</code> | New score value. |
+| [options] | <code>Object</code> | Additional Telegram query options |
 
 * * *
