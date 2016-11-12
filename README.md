@@ -9,23 +9,32 @@ npm install node-telegram-bot-api
 ```js
 var TelegramBot = require('node-telegram-bot-api');
 
+// replace the value below with the Telegram token you receive from @BotFather
 var token = 'YOUR_TELEGRAM_BOT_TOKEN';
-// Setup polling way
-var bot = new TelegramBot(token, {polling: true});
 
-// Matches /echo [whatever]
+// Create a bot that uses 'polling' to fetch new updates
+var bot = new TelegramBot(token, { polling: true });
+
+// Matches "/echo [whatever]"
 bot.onText(/\/echo (.+)/, function (msg, match) {
-  var fromId = msg.from.id;
-  var resp = match[1];
-  bot.sendMessage(fromId, resp);
+  // 'msg' is the received Message from Telegram
+  // 'match' is the result of executing the regexp above on the text content
+  // of the message
+
+  var chatId = msg.chat.id;
+  var resp = match[1]; // the captured "whatever"
+
+  // send back the matched "whatever" to the chat
+  bot.sendMessage(chatId, resp);
 });
 
-// Any kind of message
+// Listen for any kind of message. There are different kinds of
+// messages.
 bot.on('message', function (msg) {
   var chatId = msg.chat.id;
-  // photo can be: a file path, a stream or a Telegram file_id
-  var photo = 'cats.png';
-  bot.sendPhoto(chatId, photo, {caption: 'Lovely kittens'});
+
+  // send a message to the chat acknowledging receipt of their message
+  bot.sendMessage(chatId, "Received your message");
 });
 ```
 
@@ -83,6 +92,7 @@ TelegramBot
     * [.getUserProfilePhotos(userId, [offset], [limit])](#TelegramBot+getUserProfilePhotos) ⇒ <code>Promise</code>
     * [.sendLocation(chatId, latitude, longitude, [options])](#TelegramBot+sendLocation) ⇒ <code>Promise</code>
     * [.sendVenue(chatId, latitude, longitude, title, address, [options])](#TelegramBot+sendVenue) ⇒ <code>Promise</code>
+    * [.sendContact(chatId, phoneNumber, firstName, [options])](#TelegramBot+sendContact) ⇒ <code>Promise</code>
     * [.getFile(fileId)](#TelegramBot+getFile) ⇒ <code>Promise</code>
     * [.getFileLink(fileId)](#TelegramBot+getFileLink) ⇒ <code>Promise</code>
     * [.downloadFile(fileId, downloadDir)](#TelegramBot+downloadFile) ⇒ <code>Promise</code>
@@ -95,6 +105,7 @@ TelegramBot
     * [.leaveChat(chatId)](#TelegramBot+leaveChat) ⇒ <code>Promise</code>
     * [.sendGame(chatId, gameShortName, [options])](#TelegramBot+sendGame) ⇒ <code>Promise</code>
     * [.setGameScore(userId, score, [options])](#TelegramBot+setGameScore) ⇒ <code>Promise</code>
+    * [.getGameHighScores(userId, [options])](#TelegramBot+getGameHighScores) ⇒ <code>Promise</code>
 
 <a name="new_TelegramBot_new"></a>
 
@@ -114,6 +125,7 @@ Emits `message` when a message arrives.
 | [options.webHook] | <code>Boolean</code> &#124; <code>Object</code> | <code>false</code> | Set true to enable WebHook or set options |
 | [options.webHook.key] | <code>String</code> |  | PEM private key to webHook server. |
 | [options.webHook.cert] | <code>String</code> |  | PEM certificate (public) to webHook server. |
+| [options.onlyFirstMatch] | <code>Boolean</code> | <code>false</code> | Set to true to stop after first match. Otherwise, all regexps are executed |
 
 <a name="TelegramBot+stopPolling"></a>
 
@@ -454,6 +466,22 @@ Use this method to send information about a venue.
 | address | <code>String</code> | Address of the venue |
 | [options] | <code>Object</code> | Additional Telegram query options |
 
+<a name="TelegramBot+sendContact"></a>
+
+### telegramBot.sendContact(chatId, phoneNumber, firstName, [options]) ⇒ <code>Promise</code>
+Send contact.
+Use this method to send phone contacts.
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#sendcontact  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the message recipient |
+| phoneNumber | <code>String</code> | Contact's phone number |
+| firstName | <code>String</code> | Contact's first name |
+| [options] | <code>Object</code> | Additional Telegram query options |
+
 <a name="TelegramBot+getFile"></a>
 
 ### telegramBot.getFile(fileId) ⇒ <code>Promise</code>
@@ -537,7 +565,7 @@ username of a user, group or channel, etc.).
 
 | Param | Type | Description |
 | --- | --- | --- |
-| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) |
+| chatId | <code>Number</code> &#124; <code>String</code> | Unique identifier for the target chat or username of the target supergroup or channel |
 
 <a name="TelegramBot+getChatAdministrators"></a>
 
@@ -614,6 +642,19 @@ Use this method to set the score of the specified user in a game.
 | --- | --- | --- |
 | userId | <code>String</code> | Unique identifier of the target user |
 | score | <code>Number</code> | New score value. |
+| [options] | <code>Object</code> | Additional Telegram query options |
+
+<a name="TelegramBot+getGameHighScores"></a>
+
+### telegramBot.getGameHighScores(userId, [options]) ⇒ <code>Promise</code>
+Use this method to get data for high score table.
+
+**Kind**: instance method of <code>[TelegramBot](#TelegramBot)</code>  
+**See**: https://core.telegram.org/bots/api#getgamehighscores  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| userId | <code>String</code> | Unique identifier of the target user |
 | [options] | <code>Object</code> | Additional Telegram query options |
 
 * * *
